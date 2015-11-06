@@ -1,10 +1,11 @@
 {
     "require": {
-        "doctrine/orm": "*"
+        "illuminate/database": "5.0.*@dev",
+        "illuminate/events": "5.0.*@dev"
     },
     "autoload": {
         "psr-4": {
-            "App\\": "App/"
+            "App\\": "app/"
         }
     }
 }
