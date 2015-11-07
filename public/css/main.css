@@ -1,0 +1,124 @@
+body {
+    background-color: #1e2447;
+    color: #fff;
+}
+.shoutbox {
+    border: 1px solid black;
+    width: 50%;
+    height: 25%;
+    position: fixed;
+    top: 15%;
+    left: 26%;
+    background-color: #454e80;
+}
+.login_panel {
+    width: 10%;
+    height: 18%;
+    position: fixed;
+    background-color: #2c335c;
+    border-radius: 10px;
+}
+.login input[type=submit] {
+    width: 100%;
+    padding: 8px 5px;
+  
+    /* Styles */
+    border: 1px solid #0273dd; /* Fallback */
+    border: 1px solid rgba(0,0,0,0.4);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 10px 10px rgba(255,255,255,0.1);
+    border-radius: 3px;
+    background: #38a6f0;
+    cursor:pointer;
+  
+    /* Font styles */
+    font-family: 'Ubuntu', 'Lato', sans-serif;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+}
+.close_login {
+    width: 100%;
+    padding: 8px 5px;
+  
+    /* Styles */
+    border: 1px solid #0273dd; /* Fallback */
+    border: 1px solid rgba(0,0,0,0.4);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 10px 10px rgba(255,255,255,0.1);
+    border-radius: 3px;
+    background: #fff;
+    cursor:pointer;
+  
+    /* Font styles */
+    font-family: 'Ubuntu', 'Lato', sans-serif;
+    color: black;
+    font-weight: 700;
+    font-size: 15px;
+}
+.login {
+    padding-top: 5%;
+}
+.X {
+    float: right;
+}
+.ca_panel {
+    width: 10%;
+    height: 30%;
+    position: fixed;
+}
+.categories {
+    width: 50%;
+    position: fixed;
+    top: 43%;
+    left: 26%;
+    background-color: #454e80;
+    border-radius: 10px;
+}
+.admin_link {
+    position: fixed;
+    left: 26%;
+}
+.login_ca_forms {
+    position: fixed;
+    right: 24%;
+}
+.logout {
+    position: fixed;
+    right: 24%;
+}
+input {
+    color: black;
+}
+.category {
+    position: relative;
+    
+}
+.messages {
+    width: 95%;
+    height: 80%;
+    position: relative;
+    top: 4%;
+    left: 2.5%;
+    border: 1px solid grey;
+    background-color: #40466b;
+}
+#shoutbox_message {
+    position: fixed;
+    top: 37%;
+    left: 27%;
+}
+.shoutbox_message input[type=submit] {
+    color: black;
+}
+.login_now {
+    position: fixed;
+    top: 33%;
+    width: 100%;
+}
+#login_now {
+    text-align: center;
+}

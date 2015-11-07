@@ -1,21 +1,21 @@
 var login_click = function() {
     $('.show_login').hide();
     $('.show_ca').hide();
-    $('.login').show();
+    $('.login_panel').show();
 }
 var login_x_click = function() {
-    $('.login').hide();
+    $('.login_panel').hide();
     $('.show_ca').show();
     $('.show_login').show();
 }
 var ca_click = function() {
     $('.show_login').hide();
     $('.show_ca').hide();
-    $('.create').show();
+    $('.ca_panel').show();
 
 }
 var ca_x_click = function() {
-    $('.create').hide();
+    $('.ca_panel').hide();
     $('.show_login').show();
     $('.show_ca').show();
 }

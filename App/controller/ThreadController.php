@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Controller\UserController as User;
 
 class ThreadController
 {
@@ -15,5 +16,20 @@ class ThreadController
     {
         $posts = Capsule::table('posts')->where('thread_id', $thread_id)->get();
         return ['posts' =>  $posts];
+    }
+    public function delete()
+    {
+        
+    }
+    public function create($category_id, $title, $body)
+    {
+        $user_id = User::User('id');
+        $thread = Capsule::table('thread')->insert(['title' =>  $title, 'body'  =>  $body, 'category_id'    =>  $category_id, 'user_id' =>  $user_id]);
+        return true;
+        
+    }
+    public function edit()
+    {
+        
     }
 }
