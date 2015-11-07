@@ -18,7 +18,8 @@ body {
     background-color: #2c335c;
     border-radius: 10px;
 }
-.login input[type=submit] {
+.login input[type=submit],
+.create input[type=submit] {
     width: 100%;
     padding: 8px 5px;
   
@@ -39,7 +40,8 @@ body {
     font-size: 15px;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
 }
-.close_login {
+.close_login,
+.close_create {
     width: 100%;
     padding: 8px 5px;
   
@@ -62,13 +64,12 @@ body {
 .login {
     padding-top: 5%;
 }
-.X {
-    float: right;
-}
 .ca_panel {
     width: 10%;
-    height: 30%;
+    height: 25%;
     position: fixed;
+    background-color: #2c335c;
+    border-radius: 10px;
 }
 .categories {
     width: 50%;
@@ -77,6 +78,16 @@ body {
     left: 26%;
     background-color: #454e80;
     border-radius: 10px;
+}
+.threads,
+#posts {
+    width: 50%;
+    position: fixed;
+    top: 43%;
+    left: 26%;
+    background-color: #454e80;
+    border: 1px solid grey;
+    border: 1px solid grey;
 }
 .admin_link {
     position: fixed;
@@ -95,7 +106,27 @@ input {
 }
 .category {
     position: relative;
-    
+    background-radius: 10px;
+    background-color: #3d4367;
+}
+#thread {
+    border: 1px solid grey;
+}
+.post {
+    border: 1px solid grey;
+}
+.description {
+    font-size: 12px;
+    color: grey;
+}
+.description,
+.title {
+    position: relative;
+    left: 5%;
+}
+.title {
+    text-decoration: none;
+    color: white;
 }
 .messages {
     width: 95%;
@@ -121,4 +152,7 @@ input {
 }
 #login_now {
     text-align: center;
+}
+.numofthreads {
+    display: table;
 }

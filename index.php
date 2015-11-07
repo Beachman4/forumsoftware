@@ -39,11 +39,10 @@ if (isset($_POST['ca_submit'])) {
         echo "Account Created";
     }
 }
-
 ?>
 <html>
     <head>
-        <title>Login</title>
+        <title>Forum</title>
         <link rel="stylesheet" href="/public/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="/public/bootstrap/bootstrap-theme.css" />
         <link rel="stylesheet" href="/public/css/main.css"/>
@@ -68,12 +67,12 @@ if (isset($_POST['ca_submit'])) {
             <a href="#" onclick="ca_click();" class="show_ca"><button role="button" class="btn btn-default">Create Account</button></a>
             <div class="ca_panel" style="display:none">
                 <form method="post" class="create" action="/index.php">
-                    <input type="text" name="ca_username" class="ca_username" placeholder="Username">
-                    <input type="email" name="ca_email" class="ca_email" placeholder="E-Mail Address">
-                    <input type="password" name="ca_password" class="ca_password" placeholder="Password">
-                    <input type="password" name="ca_cpassword" class="ca_cpassword" placeholder="Confirm Password">
+                    <input type="text" name="ca_username" class="ca_username form-control" placeholder="Username">
+                    <input type="email" name="ca_email" class="ca_email form-control" placeholder="E-Mail Address">
+                    <input type="password" name="ca_password" class="ca_password form-control" placeholder="Password">
+                    <input type="password" name="ca_cpassword" class="ca_cpassword form-control" placeholder="Confirm Password">
                     <input type="submit" name="ca_submit">
-                    <a href="#" class="ca_X" onclick=ca_x_click();>X</a>
+                    <button class="close_create" onclick="ca_x_click();">Close</button>
                 </form>
             </div>
         </div>
@@ -103,7 +102,7 @@ if (isset($_POST['ca_submit'])) {
                     echo '<div class="category">';
                     $id = $data['id'];
                     echo "<a href='/showthread.php?C=$id' class='title'>".$data['title']."</a>";
-                    echo "<p class='body'>".$data['description']."</p>";
+                    echo "<p class='description'>".$data['description']."</p>";
                     echo '</div>';
                 }
             }

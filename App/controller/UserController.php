@@ -16,13 +16,14 @@ class UserController
     
     public function login($username, $password, $con)
     {
+        $hashed_password = md5($password);
         $auth = Capsule::table('users')->where('username', $username)->first();
         $id = $auth['id'];
         if ($this->checkLocked($id)) {
             echo "Your account is Locked";
             return false;
         } else {
-            if ($auth['password'] == $password) {
+            if ($auth['password'] == $hashed_password) {
                 $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
                 $_SESSION['username'] = $username;
                 $id = preg_replace("/[^0-9]+/", "", $id);
@@ -48,7 +49,8 @@ class UserController
     }
     public function create($username, $email, $password)
     {
-        Capsule::table('users')->insert(['username' =>  $username, 'email'  =>  $email, 'password'  =>  $password]);
+        $hashed_password = md5($password);
+        Capsule::table('users')->insert(['username' =>  $username, 'email'  =>  $email, 'password'  =>  $hashed_password]);
         return true;
     }
     static function User()

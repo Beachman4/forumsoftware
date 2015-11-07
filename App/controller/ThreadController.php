@@ -14,7 +14,7 @@ class ThreadController
     }
     public function showthread($thread_id)
     {
-        $posts = Capsule::table('posts')->where('thread_id', $thread_id)->get();
+        $posts = Capsule::table('posts')->where('thread_id', $thread_id)->orderBy('time', 'desc')->get();
         return ['posts' =>  $posts];
     }
     public function delete()
