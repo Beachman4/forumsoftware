@@ -32,4 +32,12 @@ class ThreadController
     {
         
     }
+    public function addpost($thread_id, $user_id, $body)
+    {
+        $offset = (60 * 60) * 5;
+        $now = time() + $offset;
+        $time = date("Y/m/d H:i:s", $now);
+        Capsule::table('posts')->insert(['body' =>  $body, 'user_id'    =>  $user_id, 'thread_id'   =>  $thread_id, 'time'  =>  $time]);
+        return true;
+    }
 }

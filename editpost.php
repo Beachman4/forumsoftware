@@ -1,21 +1,35 @@
 <?php
+namespace App;
 session_start();
+if (!(isset($_GET['T'], $_GET['editpost']))) {
+    header('Location:/index.php');
+}
 require_once "vendor/autoload.php";
 require_once "app/config.php";
 require_once "app/capsule.php";
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Controller\UserController;
-use App\Controller\CategoryController;
+use App\Controller\ThreadController;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
 $UserController = new UserController;
-$CatController = new CategoryController;
-$categories = $CatController->show();
+$ThreadController = new ThreadController;
 
 $User = $UserController::User();
 
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
         $UserController->logout();
+    }
+}
+
+if (isset($_SESSION['username'], $_SESSION['id'])) {
+    $loggedin = true;
+}
+      
+if (isset($_GET['logout'])) {
+    if ($_GET['logout'] == true) {
+        $UserController->logout();
+        header('Location:/index.php');
     }
 }
 
@@ -32,11 +46,23 @@ if (isset($_POST['submit'])) {
     }
 }
 if (isset($_POST['ca_submit'])) {
-    $username = $con->real_escape_string($_POST['ca_username']);
-    $email = $con->real_escape_string($_POST['ca_email']);
-    $password = $con->real_escape_string($_POST['ca_password']);
-    if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+    if ($_POST['ca_password'] != $_POST['ca_cpassword']) {
+        echo "Your password does not match";
+    } else {
+        $username = $con->real_escape_string($_POST['ca_username']);
+        $email = $con->real_escape_string($_POST['ca_email']);
+        $password = $con->real_escape_string($_POST['ca_password']);
+        if ($UserController->create($username, $email, $password)) {
+            echo "Account Created";
+        }
+    }
+}
+if (isset($_POST['reply_submit'])) {
+    $body = $_POST['add_post'];
+    $user_id = $User['id'];
+    $thread_id = $_GET['T'];
+    if ($ThreadController->addpost($thread_id, $user_id, $body)) {
+        header('Location:/showthread.php?T='.$thread_id);
     }
 }
 ?>
@@ -46,9 +72,10 @@ if (isset($_POST['ca_submit'])) {
         <link rel="stylesheet" href="/public/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="/public/bootstrap/bootstrap-theme.css" />
         <link rel="stylesheet" href="/public/css/main.css"/>
-        <script type="text/javascript" src="public/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/public/js/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="/public/bootstrap/bootstrap.min.js"></script>
-        <script type="text/javascript" src="public/js/functions.js"></script>
+        <script type="text/javascript" src="/public/js/functions.js"></script>
+        <script type="text/javascript" src="/public/ckeditor/ckeditor.js"></script>
     </head>
     <body>
         <div class="header">
@@ -95,19 +122,22 @@ if (isset($_POST['ca_submit'])) {
                 </div> -->
             </div>';
         }?>
+
         </div>
-        <div class="Categories">
+        
         <?php
-            foreach ($categories as $category) {
-                foreach ($category as $data) {
-                    echo '<div class="category">';
-                    $id = $data['id'];
-                    echo "<a href='/showthread.php?C=$id' class='title'>".$data['title']."</a>";
-                    echo "<p class='description'>".$data['description']."</p>";
-                    echo '</div>';
-                }
-            }
+        
+        $thread_id = $_GET['T'];
+        $post_id = $_GET['editpost'];
         ?>
+        <div id="edit_post">
+            <form method="post" name="edit_post_form" id="edit_post_form">
+                <textarea name="edit_post" class="edit_post"></textarea>
+                <button type="submit" class="btn btn-info" id="edit_post_button">Edit Post</button>
+            </form>
         </div>
+        
+        
+        
     </body>
 </html>

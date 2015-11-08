@@ -12,7 +12,7 @@ $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
 $UserController = new UserController;
 $ThreadController = new ThreadController;
 
-$User = $UserController::User($con);
+$User = $UserController::User();
 
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -23,7 +23,6 @@ if (isset($_GET['logout'])) {
 if (isset($_SESSION['username'], $_SESSION['id'])) {
     $loggedin = true;
 }
-
 if (isset($_GET['C'])) {
     $category_id = $_GET['C'];
     $threads = $ThreadController->show($category_id);
@@ -32,9 +31,10 @@ if (isset($_GET['T'])) {
     $thread_id = $_GET['T'];
     $posts = $ThreadController->showthread($thread_id);
 }       
-        if (isset($_GET['logout'])) {
+if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
         $UserController->logout();
+        header('Location:/index.php');
     }
 }
 
@@ -51,11 +51,23 @@ if (isset($_POST['submit'])) {
     }
 }
 if (isset($_POST['ca_submit'])) {
-    $username = $con->real_escape_string($_POST['ca_username']);
-    $email = $con->real_escape_string($_POST['ca_email']);
-    $password = $con->real_escape_string($_POST['ca_password']);
-    if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+    if ($_POST['ca_password'] != $_POST['ca_cpassword']) {
+        echo "Your password does not match";
+    } else {
+        $username = $con->real_escape_string($_POST['ca_username']);
+        $email = $con->real_escape_string($_POST['ca_email']);
+        $password = $con->real_escape_string($_POST['ca_password']);
+        if ($UserController->create($username, $email, $password)) {
+            echo "Account Created";
+        }
+    }
+}
+if (isset($_POST['reply_submit'])) {
+    $body = $_POST['add_post'];
+    $user_id = $User['id'];
+    $thread_id = $_GET['T'];
+    if ($ThreadController->addpost($thread_id, $user_id, $body)) {
+        header('Location:/showthread.php?T='.$thread_id);
     }
 }
 ?>
@@ -104,6 +116,7 @@ if (isset($_POST['ca_submit'])) {
                 echo '<a href="admin/index.php" class="admin_link"><button role="button" class="btn btn-info">Admin Panel</button></a>';
             }
             echo '<a href="index.php?logout=true" class="logout"><button role="button" class="btn btn-danger">Logout</button></a>
+            <!-- Future Project
             <div class="shoutbox">
                 <div class="messages"></div>
                 <div id="shoutbox_message">
@@ -111,12 +124,15 @@ if (isset($_POST['ca_submit'])) {
                         <input type="text" name="message" size="80" class="message" placeholder="Enter your Message">
                         <input type="submit" name="submit">
                     </form>
-                </div>
+                </div> -->
             </div>';
         }?>
         </div>
         <?php
             if (isset($_GET['C'])) {
+                if (isset($loggedin)) {
+                    echo '<a href="/showthread.php?add_thread=true" class="add_thread_btn"><button type="button" class="btn btn-default">Create Thread</button></a>';
+                }
                 echo '<div class="threads">';
                 foreach ($threads as $thread) {
                     foreach ($thread as $data) {
@@ -141,16 +157,30 @@ if (isset($_POST['ca_submit'])) {
                         $poster = Capsule::table('users')->select('username')->where('id', $user_id)->first();
                         echo "<p class='poster' style='text-align: center; word-wrap: break-word;'>".$poster['username']."</p></div><div class='body'>";
                         echo "<p id='body'>".$data['body']."</p>";
-                        echo '</div></div>';
+                        echo '</div>';
+                        if ($User['admin'] == 1) {
+                            echo '<a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a>';
+                        }
+                        if ($user_id == $User['id']) {
+                            /*echo '<a class="edit_post_user" href="/showthread.php?T="'.$thread_id.'&editpost='.$data['id'].'>Edit</a>'; */
+                            $thread_id = $data['thread_id'];
+                            $post_id = $data['id'];
+                            echo "<a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a>";
+                        }
+                        echo '</div>';
                     }
                 }
-                echo '<div class="add_post"><form method="post" name="add" id="add">
-                    <textarea name="add_post" id="add_post" ></textarea>
-                    <script type="text/javascript">
-                        CKEDITOR.replace("add_post");
-                    </script>
-                    <button class="btn btn-info" id="reply_submit" style="float: right;" type="submit">Post Reply</button>
-                </form></div>';
+                if ($User['readonly'] == 1) {
+                    echo 'You cannot post';
+                } elseif (isset($loggedin)) {
+                    echo '<div class="add_post"><form method="post" name="add" id="add">
+                        <textarea name="add_post" id="add_post" ></textarea>
+                        <script type="text/javascript">
+                            CKEDITOR.replace("add_post");
+                        </script>
+                        <button class="btn btn-info" name="reply_submit" id="reply_submit" style="float: right;" type="submit">Post Reply</button>
+                    </form></div>';
+                }
                 echo '</div>';
             }
             ?>
