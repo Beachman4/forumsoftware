@@ -103,6 +103,7 @@ if (isset($_POST['ca_submit'])) {
                     $id = $data['id'];
                     echo "<a href='/showthread.php?C=$id' class='title'>".$data['title']."</a>";
                     echo "<p class='description'>".$data['description']."</p>";
+                    echo "<p class='time'>".$data['time']."</p>";
                     echo '</div>';
                 }
             }

@@ -14,7 +14,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class UserController
 {
     
-    public function login($username, $password, $con)
+    public function login($username, $password)
     {
         $hashed_password = md5($password);
         $auth = Capsule::table('users')->where('username', $username)->first();

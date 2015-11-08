@@ -65,9 +65,10 @@ if (isset($_POST['ca_submit'])) {
         <link rel="stylesheet" href="/public/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="/public/bootstrap/bootstrap-theme.css" />
         <link rel="stylesheet" href="/public/css/main.css"/>
-        <script type="text/javascript" src="public/js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/public/js/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="/public/bootstrap/bootstrap.min.js"></script>
-        <script type="text/javascript" src="public/js/functions.js"></script>
+        <script type="text/javascript" src="/public/js/functions.js"></script>
+        <script type="text/javascript" src="/public/ckeditor/ckeditor.js"></script>
     </head>
     <body>
         <div class="header">
@@ -135,13 +136,23 @@ if (isset($_POST['ca_submit'])) {
                 foreach ($posts as $post) {
                     foreach ($post as $data) {
                         echo '<div class="post">';
-                        echo $data['body'];
-                        echo '</div>';
+                        echo '<div class="user">';
+                        $user_id = $data['user_id'];
+                        $poster = Capsule::table('users')->select('username')->where('id', $user_id)->first();
+                        echo "<p class='poster' style='text-align: center; word-wrap: break-word;'>".$poster['username']."</p></div><div class='body'>";
+                        echo "<p id='body'>".$data['body']."</p>";
+                        echo '</div></div>';
                     }
                 }
+                echo '<div class="add_post"><form method="post" name="add" id="add">
+                    <textarea name="add_post" id="add_post" ></textarea>
+                    <script type="text/javascript">
+                        CKEDITOR.replace("add_post");
+                    </script>
+                    <button class="btn btn-info" id="reply_submit" style="float: right;" type="submit">Post Reply</button>
+                </form></div>';
                 echo '</div>';
             }
             ?>
-        
     </body>
 </html>

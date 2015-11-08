@@ -82,7 +82,7 @@ body {
 .threads,
 #posts {
     width: 50%;
-    position: fixed;
+    position: relative;
     top: 43%;
     left: 26%;
     background-color: #454e80;
@@ -106,14 +106,16 @@ input {
 }
 .category {
     position: relative;
-    background-radius: 10px;
-    background-color: #3d4367;
+    border: 1px solid grey;
+    border-radius: 10px;
 }
 #thread {
     border: 1px solid grey;
 }
 .post {
     border: 1px solid grey;
+    width: 100%;
+    clear: both;
 }
 .description {
     font-size: 12px;
@@ -155,4 +157,22 @@ input {
 }
 .numofthreads {
     display: table;
+}
+.user {
+    position: relative;
+    width: 15%;
+    float: left;
+    padding-bottom: 5em;
+}
+.body {
+    width: 75%;
+    padding-bottom: 5em;
+    border-left: 1px solid grey;
+    display: inline-block;
+}
+.add_post {
+    width: 90%;
+    position: relative;
+    left: 5%;
+    padding-top: 3%;
 }
