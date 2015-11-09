@@ -169,7 +169,7 @@ if (isset($_POST['admin_password_submit'])) {
         </div>';
         } else {
             if ($User['admin'] == 1) {
-                echo '<a href="admin/index.php" class="admin_link"><button role="button" class="btn btn-info">Admin Panel</button></a>';
+                echo '<a href="/admin/index.php" class="admin_link"><button role="button" class="btn btn-info">Admin Panel</button></a>';
             }
             echo '<a href="/settings.php" class="settings_btn"><button role="button" class="btn btn-success">Settings</button></a>
             <a href="index.php?logout=true" class="logout"><button role="button" class="btn btn-danger">Logout</button></a>
