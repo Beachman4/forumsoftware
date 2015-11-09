@@ -14,7 +14,7 @@ body {
 .login_panel {
     width: 10%;
     height: 18%;
-    position: relative;
+    position: fixed;
     background-color: #2c335c;
     border-radius: 10px;
 }
@@ -39,6 +39,7 @@ body {
     font-weight: 700;
     font-size: 15px;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.8);
+    z-index: 999999;
 }
 .close_login,
 .close_create {
@@ -60,16 +61,19 @@ body {
     color: black;
     font-weight: 700;
     font-size: 15px;
+    z-index: 999999;
 }
 .login {
     padding-top: 5%;
+    z-index: 999999;
 }
 .ca_panel {
     width: 10%;
     height: 25%;
-    position: relative;
+    position: fixed;
     background-color: #2c335c;
     border-radius: 10px;
+    z-index: 999999;
 }
 .categories {
     width: 50%;
@@ -78,24 +82,35 @@ body {
     left: 26%;
     background-color: #454e80;
     border-radius: 10px;
+    z-index: 1;
 }
 .threads,
-#posts {
+#posts,
+.post_edit {
     width: 50%;
     position: relative;
     top: 15%;
     left: 26%;
     background-color: #454e80;
     border: 1px solid grey;
+    z-index: 1;
+}
+.add_thread {
+    width: 50%;
+    position: relative;
+    top: 15%;
+    left: 26%;
+    background-color: #454e80;
     border: 1px solid grey;
 }
 .admin_link {
-    position: relative;
+    position: fixed;
     left: 26%;
 }
 .login_ca_forms {
-    position: relative;
+    position: fixed;
     right: 24%;
+    z-index: 999999;
 }
 .logout {
     position: relative;
@@ -108,6 +123,7 @@ input {
     position: relative;
     border: 1px solid grey;
     border-radius: 10px;
+    z-index: 1;
 }
 #thread {
     border: 1px solid grey;
@@ -148,8 +164,8 @@ input {
     color: black;
 }
 .login_now {
-    position: fixed;
-    top: 33%;
+    position: relative;
+    top: 45%;
     width: 100%;
 }
 #login_now {
@@ -170,15 +186,49 @@ input {
     border-left: 1px solid grey;
     display: inline-block;
 }
-.add_post {
+.add_post,
+.edit_post {
     width: 90%;
     position: relative;
     left: 5%;
     padding-top: 3%;
     height: 38%;
 }
-.add_thread_btn {
+.thread_add {
+    width: 90%;
+    position: relative;
+    left: 5%;
+    padding-top: 3%;
+    height: 45%;
+}
+.add_thread_btn,
+#edit_post_button {
     position: fixed;
     top: 14.7%;
     left: 69.8%;
+}
+.return {
+    position: relative;
+    left: 0;
+}
+.edit_delete {
+    float: right;
+    position:relative;
+}
+.edit_post_user,
+.delete_link {
+    background-color: blue;
+    border-radius: 2px;
+    text-decoration: none;
+    color: white;
+}
+.delete_link {
+    position: relative;
+    right: 15%;
+}
+.edit_delete a {
+    text-decoration: none;
+}
+#thread_add input[type=text] {
+    color: black;
 }

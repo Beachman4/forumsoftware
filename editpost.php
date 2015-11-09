@@ -8,13 +8,13 @@ require_once "vendor/autoload.php";
 require_once "app/config.php";
 require_once "app/capsule.php";
 use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Controller\UserController;
+use App\Controller\UserController as User;
 use App\Controller\ThreadController;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new UserController;
+$UserController = new User;
 $ThreadController = new ThreadController;
 
-$User = $UserController::User();
+$User = User::User();
 
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -57,11 +57,11 @@ if (isset($_POST['ca_submit'])) {
         }
     }
 }
-if (isset($_POST['reply_submit'])) {
-    $body = $_POST['add_post'];
-    $user_id = $User['id'];
+if (isset($_POST['edit_submit'])) {
+    $edited_body = $_POST['edit_post'];
     $thread_id = $_GET['T'];
-    if ($ThreadController->addpost($thread_id, $user_id, $body)) {
+    $post_id = $_GET['editpost'];
+    if ($ThreadController->editpost($post_id, $edited_body)) {
         header('Location:/showthread.php?T='.$thread_id);
     }
 }
@@ -129,15 +129,34 @@ if (isset($_POST['reply_submit'])) {
         
         $thread_id = $_GET['T'];
         $post_id = $_GET['editpost'];
+        $post = Capsule::table('posts')->select('body', 'user_id')->where('id',$post_id)->first();
+        $body = $post['body'];
+        if ($User['admin']==1) {
+            echo '<div class="post_edit">';
+            echo '<div class="edit_post"><form method="post" name="edit" id="edit">
+                <textarea name="edit_post" id="edit_post" >'.$body.'</textarea>
+                <script type="text/javascript">
+                    CKEDITOR.replace("edit_post");
+                </script>
+                <button class="btn btn-info" name="edit_submit" id="edit_submit" style="float: right;" type="submit">Edit Post</button>
+            </form></div>';
+        echo '</div>';
+        } elseif ($post['user_id'] == $User['id']) {
+            echo '<div class="posts">';
+        if ($User['readonly'] == 1) {
+            header('Location: /index.php');
+        } elseif (isset($loggedin)) {
+            echo '<div class="edit_post"><form method="post" name="edit" id="edit">
+                <textarea name="edit_post" id="edit_post" >'.$body.'</textarea>
+                <script type="text/javascript">
+                    CKEDITOR.replace("edit_post");
+                </script>
+                <button class="btn btn-info" name="edit_submit" id="edit_submit" style="float: right;" type="submit">Edit Post</button>
+            </form></div>';}
+        echo '</div>';
+        } else {
+            header("Location: /index.php");
+        }
         ?>
-        <div id="edit_post">
-            <form method="post" name="edit_post_form" id="edit_post_form">
-                <textarea name="edit_post" class="edit_post"></textarea>
-                <button type="submit" class="btn btn-info" id="edit_post_button">Edit Post</button>
-            </form>
-        </div>
-        
-        
-        
     </body>
 </html>

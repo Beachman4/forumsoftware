@@ -8,9 +8,11 @@ require_once "app/capsule.php";
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Controller\UserController;
 use App\Controller\ThreadController;
+use App\Paginate;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
 $UserController = new UserController;
 $ThreadController = new ThreadController;
+$Paginate = new Paginate;
 
 $User = $UserController::User();
 
@@ -70,6 +72,20 @@ if (isset($_POST['reply_submit'])) {
         header('Location:/showthread.php?T='.$thread_id);
     }
 }
+if (isset($_GET['delete_post'])) {
+    $post_id = $_GET['delete_post'];
+    $thread_id = $_GET['T'];
+    if ($ThreadController->deletepost($post_id)) {
+        header("Location:/showthread.php?T=$thread_id");
+    }
+}
+if (isset($_GET['deletethread'])) {
+    $thread_id = $_GET['deletethread'];
+    $category_id = $_GET['C'];
+    if ($ThreadController->delete($thread_id)) {
+        header("Location:/showthread.php?C=$category_id");
+    }
+}
 ?>
 <html>
     <head>
@@ -109,7 +125,7 @@ if (isset($_POST['reply_submit'])) {
             </div>
         </div>
         <div class="login_now">
-            <h1 id="login_now">Login or Create an Account to post</h1>
+            <!--<h1 id="login_now">Login or Create an Account to post</h1>-->
         </div>';
         } else {
             if ($User['admin'] == 1) {
@@ -131,7 +147,7 @@ if (isset($_POST['reply_submit'])) {
         <?php
             if (isset($_GET['C'])) {
                 if (isset($loggedin)) {
-                    echo '<a href="/showthread.php?add_thread=true" class="add_thread_btn"><button type="button" class="btn btn-default">Create Thread</button></a>';
+                    echo '<a href="/addthread.php?C='.$_GET['C'].'&add_thread=true" class="add_thread_btn"><button type="button" class="btn btn-default">Create Thread</button></a>';
                 }
                 echo '<div class="threads">';
                 foreach ($threads as $thread) {
@@ -140,15 +156,20 @@ if (isset($_POST['reply_submit'])) {
                         $thread_id = $data['id'];
                         $user_id = $data['user_id'];
                         $thread_starter = Capsule::table('users')->select('username')->where('id',$user_id)->first();
+                        $category_id = $_GET['C'];
                         echo "<a href='/showthread.php?T=$thread_id'>".$data['title']."</a>";
                         echo "<p class='started_by'>Started By: ".$thread_starter['username']."</p>";
+                        echo "<div class='delete'><a href='/showthread.php?C=$category_id&deletethread=$thread_id' class='delete_thread'>Delete</a></div>";
                         echo '</div>';
                     }
                 }
                 echo '</div>';
             }
             if (isset($_GET['T'])) {
+                $category = Capsule::table('threads')->select('category_id')->where('id', $_GET['T'])->first();
+                $category_id = $category['category_id'];
                 echo '<div id="posts">';
+                echo "<a href='/showthread.php?C=$category_id' class='return'><button type='button' class='btn btn-default'>Return to Category</button></a>";
                 foreach ($posts as $post) {
                     foreach ($post as $data) {
                         echo '<div class="post">';
@@ -159,17 +180,27 @@ if (isset($_POST['reply_submit'])) {
                         echo "<p id='body'>".$data['body']."</p>";
                         echo '</div>';
                         if ($User['admin'] == 1) {
-                            echo '<a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a>';
-                        }
-                        if ($user_id == $User['id']) {
+                            $thread_id = $data['thread_id'];
+                            $post_id = $data['id'];
+                            $primary = $data['primary_post'];
+                            if ($primary == 1) {
+                                   echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a></div>";
+                            } else {
+                                echo '<div class="edit_delete"><a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a>';
+                                echo "<a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a></div>";
+                            }
+                                
+                        } elseif ($user_id == $User['id']) {
                             /*echo '<a class="edit_post_user" href="/showthread.php?T="'.$thread_id.'&editpost='.$data['id'].'>Edit</a>'; */
                             $thread_id = $data['thread_id'];
                             $post_id = $data['id'];
-                            echo "<a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a>";
+                            echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a>";
+                            echo '<a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a></div>>';
                         }
                         echo '</div>';
                     }
                 }
+                //$Paginate->getdata($thread_id);
                 if ($User['readonly'] == 1) {
                     echo 'You cannot post';
                 } elseif (isset($loggedin)) {
