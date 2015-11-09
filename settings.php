@@ -121,15 +121,15 @@ if (isset($_POST['change_password_submit'])) {
             <?php
             if (isset($_GET['edit_password'])) {
                 echo '<form method="post" class="edit_password" name="edit_password">
-                    <input type="password" name="change_password" placeholder="Password" class="change_password form-control">
-                    <input type="password" name="con_change_password" placeholder="Confirm Password" class="con_change_password form-control">
+                    Password: <input type="password" name="change_password" placeholder="Password" class="change_password form-control">
+                    Comfirm Password: <input type="password" name="con_change_password" placeholder="Confirm Password" class="con_change_password form-control">
                     <button type="submit" name="change_password_submit" class="btn btn-success" id="change_password_submit">Change Password</button>
                 </form>
                 <a href="settings.php" class="back_settings"><button role="button" class="btn btn-default">Back to Settings</button></a>';
             } else {
             echo '<form method="post" name="settings" id="settings">
-                <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
-                <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
+                First Name: <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
+                Last Name: <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
                 <button type="submit" class="btn btn-success" id="submit_settings" name="submit_settings">Edit Settings</button>
             </form>
             <a href="settings.php?edit_password=true" class="edit_pass_btn"><button role="button" class="btn btn-default">Edit Password</button></a>';} ?>

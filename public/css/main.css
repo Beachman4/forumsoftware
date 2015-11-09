@@ -284,12 +284,16 @@ input {
 }
 #settings,
 .edit_password,
-#edit_user,
-.admin_edit_password,
-#create_user {
+.admin_edit_password {
     position: relative;
     left: 33%;
     top: 20%;
+}
+#create_user,
+#edit_user {
+    position: relative;
+    left: 33%;
+    top: 5%;
 }
 .edit_pass_btn {
     position: relative;

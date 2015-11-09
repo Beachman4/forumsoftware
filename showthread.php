@@ -12,7 +12,6 @@ use App\Paginate;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
 $UserController = new UserController;
 $ThreadController = new ThreadController;
-$Paginate = new Paginate;
 
 $User = $UserController::User();
 

@@ -23,6 +23,10 @@ class UserController
             return false;
         } else {
             if ($auth['password'] == $hashed_password) {
+                $offset = (60 * 60) * 7;
+                $now = time() - $offset;
+                $time = date("Y/m/d H:i:s", $now);
+                Capsule::table('users')->where('id', $id)->update(['last_login' =>  $time]);
                 $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
                 $_SESSION['username'] = $username;
                 $id = preg_replace("/[^0-9]+/", "", $id);

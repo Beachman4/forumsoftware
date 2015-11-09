@@ -34,7 +34,7 @@ class ThreadController
         echo '<div id="paging"><p>', $prevlink, $nextlink, ' </p></div>';
     }
         
-        $threads = Capsule::table('threads')->where('category_id', $category_id)->orderBy('time', 'asc')->skip($offset)->take($limit)->get();
+        $threads = Capsule::table('threads')->where('category_id', $category_id)->orderBy('updated', 'desc')->skip($offset)->take($limit)->get();
         return ['threads'   =>  $threads];
     }
     public function showthread($thread_id)
@@ -71,25 +71,22 @@ class ThreadController
     }
     public function create($category_id, $title, $body, $user_id)
     {
-        $offset = (60 * 60) * 5;
-        $now = time() + $offset;
+        $offset = (60 * 60) * 7;
+        $now = time() - $offset;
         $time = date("Y/m/d H:i:s", $now);
-        $thread = Capsule::table('threads')->insert(['title' =>  $title, 'category_id'    =>  $category_id, 'user_id' =>  $user_id, 'time'  =>  $time]);
+        $thread = Capsule::table('threads')->insert(['title' =>  $title, 'category_id'    =>  $category_id, 'user_id' =>  $user_id, 'time'  =>  $time, 'updated'    =>  $time]);
         $get_thread = Capsule::table('threads')->orderBy('time', 'desc')->first();
         $thread_id = $get_thread['id'];
         $post = Capsule::table('posts')->insert(['body' =>  $body, user_id  =>  $user_id, 'thread_id'   =>  $thread_id, 'primary_post'  =>  '1', 'time' =>  $time]);
         return true;
         
     }
-    public function edit()
-    {
-        
-    }
     public function addpost($thread_id, $user_id, $body)
     {
-        $offset = (60 * 60) * 5;
-        $now = time() + $offset;
+        $offset = (60 * 60) * 7;
+        $now = time() - $offset;
         $time = date("Y/m/d H:i:s", $now);
+        Capsule::table('threads')->where('id',$thread_id)->update(['updated'    =>  $time]);
         Capsule::table('posts')->insert(['body' =>  $body, 'user_id'    =>  $user_id, 'thread_id'   =>  $thread_id, 'primary_post'  =>  '0', 'time'  =>  $time]);
         return true;
     }

@@ -34,13 +34,14 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
   `time` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table task.login_attempts: ~4 rows (approximately)
+-- Dumping data for table task.login_attempts: ~5 rows (approximately)
 /*!40000 ALTER TABLE `login_attempts` DISABLE KEYS */;
 INSERT INTO `login_attempts` (`id`, `time`) VALUES
 	(1, '1446914366'),
 	(1, '1446914392'),
 	(1, '1446914402'),
-	(1, '1446914411');
+	(1, '1446914411'),
+	(NULL, '1447045690');
 /*!40000 ALTER TABLE `login_attempts` ENABLE KEYS */;
 
 
@@ -54,9 +55,9 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
--- Dumping data for table task.posts: ~7 rows (approximately)
+-- Dumping data for table task.posts: ~31 rows (approximately)
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
 INSERT INTO `posts` (`id`, `body`, `user_id`, `thread_id`, `primary_post`, `time`) VALUES
 	(1, 'Testing', 1, 1, 0, '2015-11-07 10:37:47'),
@@ -84,7 +85,14 @@ INSERT INTO `posts` (`id`, `body`, `user_id`, `thread_id`, `primary_post`, `time
 	(41, '<p>test</p>\r\n', 1, 3, 0, '2015-11-09 08:03:04'),
 	(42, '<p>test</p>\r\n', 1, 3, 0, '2015-11-09 08:03:06'),
 	(43, '<p>test</p>\r\n', 1, 3, 0, '2015-11-09 08:03:08'),
-	(44, '<p>test</p>\r\n', 1, 3, 0, '2015-11-09 08:03:17');
+	(44, '<p>test</p>\r\n', 1, 3, 0, '2015-11-09 08:03:17'),
+	(45, '<p>Updating</p>\r\n', 1, 10, 0, '2015-11-09 21:12:58'),
+	(46, '<p>updated</p>\r\n', 1, 9, 0, '2015-11-09 21:15:16'),
+	(47, '<p>Test</p>\r\n', 1, 10, 0, '2015-11-09 21:15:36'),
+	(48, '<p>Test</p>\r\n', 1, 10, 0, '2015-11-09 21:15:38'),
+	(49, '<p>Test</p>\r\n', 1, 10, 0, '2015-11-09 21:15:41'),
+	(50, '<p>test</p>\r\n', 1, 10, 0, '2015-11-09 11:23:36'),
+	(51, '<p>test</p>\r\n', 1, 10, 0, '2015-11-09 09:25:29');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 
 
@@ -95,22 +103,23 @@ CREATE TABLE IF NOT EXISTS `threads` (
   `category_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `time` timestamp NULL DEFAULT NULL,
+  `updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- Dumping data for table task.threads: ~8 rows (approximately)
+-- Dumping data for table task.threads: ~10 rows (approximately)
 /*!40000 ALTER TABLE `threads` DISABLE KEYS */;
-INSERT INTO `threads` (`id`, `title`, `category_id`, `user_id`, `time`) VALUES
-	(1, 'Test', 1, 1, '2015-11-08 17:00:16'),
-	(2, 'Test', 1, 1, '2015-11-08 17:00:17'),
-	(3, 'Test', 2, 1, '2015-11-08 17:00:18'),
-	(4, 'Test', 2, 1, '2015-11-08 17:00:19'),
-	(5, 'Test', 3, 1, '2015-11-08 17:00:22'),
-	(6, 'Test', 3, 1, '2015-11-08 17:00:22'),
-	(7, 'Test', 4, 1, '2015-11-08 17:00:23'),
-	(8, 'Test', 4, 1, '2015-11-08 17:00:24'),
-	(9, 'Testing', 1, 1, '2015-11-09 06:25:15'),
-	(10, 'Jordan is weird', 1, 1, '2015-11-09 06:25:32');
+INSERT INTO `threads` (`id`, `title`, `category_id`, `user_id`, `time`, `updated`) VALUES
+	(1, 'Test', 1, 1, '2015-11-08 17:00:16', '2015-11-09 09:08:12'),
+	(2, 'Test', 1, 1, '2015-11-08 17:00:17', '2015-11-09 09:08:14'),
+	(3, 'Test', 2, 1, '2015-11-08 17:00:18', '2015-11-09 09:08:14'),
+	(4, 'Test', 2, 1, '2015-11-08 17:00:19', '2015-11-09 09:08:15'),
+	(5, 'Test', 3, 1, '2015-11-08 17:00:22', '2015-11-09 09:08:17'),
+	(6, 'Test', 3, 1, '2015-11-08 17:00:22', '2015-11-09 09:08:16'),
+	(7, 'Test', 4, 1, '2015-11-08 17:00:23', '2015-11-09 09:08:18'),
+	(8, 'Test', 4, 1, '2015-11-08 17:00:24', '2015-11-09 09:08:18'),
+	(9, 'Testing', 1, 1, '2015-11-09 06:25:15', '2015-11-09 21:15:16'),
+	(10, 'Jordan is weird', 1, 1, '2015-11-09 06:25:32', '2015-11-09 09:25:29');
 /*!40000 ALTER TABLE `threads` ENABLE KEYS */;
 
 
@@ -119,22 +128,28 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL DEFAULT '0',
   `email` varchar(50) NOT NULL DEFAULT '0',
+  `first_name` varchar(50) NOT NULL DEFAULT '0',
+  `last_name` varchar(50) NOT NULL DEFAULT '0',
   `password` varchar(128) NOT NULL DEFAULT '0',
   `admin` int(1) NOT NULL DEFAULT '0',
   `readonly` int(1) NOT NULL DEFAULT '0',
+  `last_login` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
--- Dumping data for table task.users: ~3 rows (approximately)
+-- Dumping data for table task.users: ~7 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `admin`, `readonly`) VALUES
-	(1, 'MasterYodA', 'beachman4@hotmail.com', '39eb101542f59231dfbc52245b93903a', 1, 0),
-	(3, 'test', 'test@test.com', '39eb101542f59231dfbc52245b93903a', 0, 0),
-	(8, 'test123', 'test@test.comasd', '39eb101542f59231dfbc52245b93903a', 0, 0),
-	(11, 'testing123', 'test123@test.com', '6e530de9615ed5e3de409e192a8f864e', 0, 0);
+INSERT INTO `users` (`id`, `username`, `email`, `first_name`, `last_name`, `password`, `admin`, `readonly`, `last_login`) VALUES
+	(1, 'MasterYodA', 'beachman4@hotmail.com', 'Aylon', 'Armstrong', '39eb101542f59231dfbc52245b93903a', 1, 0, NULL),
+	(3, 'test', 'test@test.com', 'test', 'test', '39eb101542f59231dfbc52245b93903a', 0, 0, NULL),
+	(8, 'test123', 'test@test.comasd', 'test', 'test', '39eb101542f59231dfbc52245b93903a', 0, 0, NULL),
+	(12, 'SmartMan', 'nick.parker132@gmail.com', 'Nick', 'Parker', 'c723c5049b83b9047e23cf12dd1822a9', 0, 0, NULL),
+	(16, 'Beachman4', 'beachman19@gmail.com', 'Aylon', 'Armstrong', 'cfa3209b24f5b060aec035e96a11b6df', 1, 0, NULL),
+	(17, 'Groupm7', 'jason@groupm7.com', 'Group', 'M7', '1df0682aa7243c95724338505178e724', 1, 0, '2015-11-09 09:35:23'),
+	(18, 'TestUser', 'testuser@me.com', 'Test', 'User', 'ae2b1fca515949e5d54fb22b8ed95575', 1, 1, NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

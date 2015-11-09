@@ -171,7 +171,7 @@ if (isset($_POST['admin_password_submit'])) {
             if ($User['admin'] == 1) {
                 echo '<a href="admin/index.php" class="admin_link"><button role="button" class="btn btn-info">Admin Panel</button></a>';
             }
-            echo '<a href="settings.php" class="settings_btn"><button role="button" class="btn btn-success">Settings</button></a>
+            echo '<a href="/settings.php" class="settings_btn"><button role="button" class="btn btn-success">Settings</button></a>
             <a href="index.php?logout=true" class="logout"><button role="button" class="btn btn-danger">Logout</button></a>
             <!-- Future Project
             <div class="shoutbox">
@@ -190,16 +190,16 @@ if (isset($_POST['admin_password_submit'])) {
                 echo '<a href="index.php" class="back_user"><button role="button" class="btn btn-success">Back</button></a>';
                 echo '<div class="create_user">';
                 echo '<form method="post" name="create_user" id="create_user">
-                <input type="text" name="create_username" class="create_username form-control" placeholder="Username">
-                <input type="text" name="create_email" class="create_email form-control" placeholder="E-Mail Address">
-                <input type="text" name="create_fname" class="create_fname form-control" placeholder="First Name">
-                <input type="text" name="create_lname" class="create_lname form-control" placeholder="Last Name">
-                <input type="password" name="create_password" class="create_password form-control" placeholder="Password">
-                <select name="create_admin" class="create_admin form-control">
+                Username: <input type="text" name="create_username" class="create_username form-control" placeholder="Username">
+                E-Mail Address: <input type="text" name="create_email" class="create_email form-control" placeholder="E-Mail Address">
+                First Name: <input type="text" name="create_fname" class="create_fname form-control" placeholder="First Name">
+                Last Name: <input type="text" name="create_lname" class="create_lname form-control" placeholder="Last Name">
+                Password: <input type="password" name="create_password" class="create_password form-control" placeholder="Password">
+                Admin? <select name="create_admin" class="create_admin form-control">
                     <option>No</option>
                     <option>Yes</option>
                 </select>
-                <select name="create_readonly" class="create_readonly form-control">
+                Readonly? <select name="create_readonly" class="create_readonly form-control">
                     <option>No</option>
                     <option>Yes</option>
                 </select>
@@ -212,8 +212,8 @@ if (isset($_POST['admin_password_submit'])) {
                 echo '<a href="index.php?user='.$_GET['edit_user'].'" class="back_user"><button role="button" class="btn btn-success">Back</button></a>';
                 echo '<div class="edit_user">';
                 echo '<form method="post" class="admin_edit_password" name="admin_edit_password">
-                    <input type="password" name="admin_password" placeholder="Password" class="admin_password form-control">
-                    <input type="password" name="con_admin_password" placeholder="Confirm Password" class="con_admin_password form-control">
+                    Password: <input type="password" name="admin_password" placeholder="Password" class="admin_password form-control">
+                    Confirm Password: <input type="password" name="con_admin_password" placeholder="Confirm Password" class="con_admin_password form-control">
                     <button type="submit" name="admin_password_submit" class="btn btn-success" id="admin_password_submit">Change Password</button>
                 </form>';
             } elseif (isset($_GET['edit_user'])) {
@@ -222,15 +222,15 @@ if (isset($_POST['admin_password_submit'])) {
                 $user_id = $_GET['edit_user'];
                 $User = Capsule::table('users')->where('id', $user_id)->first();
                 echo '<form method="post" name="edit_user" id="edit_user">
-                <input type="text" name="username" class="username form-control" value="'.$User['username'].'">
-                <input type="text" name="email" class="email form-control" value="'.$User['email'].'">
-                <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
-                <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
-                <select name="edit_admin" class="edit_admin form-control">
+                Username: <input type="text" name="username" class="username form-control" value="'.$User['username'].'">
+                E-Mail Address: <input type="text" name="email" class="email form-control" value="'.$User['email'].'">
+                First Name: <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
+                Last Name: <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
+                Admin? <select name="edit_admin" class="edit_admin form-control">
                     <option>No</option>
                     <option>Yes</option>
                 </select>
-                <select name="edit_readonly" class="edit_readonly form-control">
+                Readonly? <select name="edit_readonly" class="edit_readonly form-control">
                     <option>No</option>
                     <option>Yes</option>
                 </select>
