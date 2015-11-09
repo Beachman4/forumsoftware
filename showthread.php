@@ -1,7 +1,6 @@
 <?php
 namespace App;
 session_start();
-
 require_once "vendor/autoload.php";
 require_once "app/config.php";
 require_once "app/capsule.php";
@@ -27,11 +26,12 @@ if (isset($_SESSION['username'], $_SESSION['id'])) {
 if (isset($_GET['C'])) {
     $category_id = $_GET['C'];
     $threads = $ThreadController->show($category_id);
-}
-if (isset($_GET['T'])) {
+} elseif (isset($_GET['T'])) {
     $thread_id = $_GET['T'];
     $posts = $ThreadController->showthread($thread_id);
-}       
+} else {
+    header("Location:/index.php");
+}
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
         $UserController->logout();
