@@ -105,11 +105,10 @@ if (isset($_GET['deletethread'])) {
             echo '<div class="login_ca_forms">
             <a href="#" onclick="login_click();" class="show_login"><button role="button" class="btn btn-default">Login</button></a>
             <div class="login_panel" style="display:none">
-                <form method="post" class="login" action="/index.php">
+                <form method="post" class="login" action="/showthread.php">
                     <input type="text" name="username" class="username form-control" placeholder="Username">
                     <input type="password" name="password" class="password form-control" placeholder="Password">
                     <input type="submit" name="submit" class="submit" value="Login">
-                    <button class="close_login" onclick="login_x_click();">Close</button>
                 </form>
             </div>
             <a href="#" onclick="ca_click();" class="show_ca"><button role="button" class="btn btn-default">Create Account</button></a>
@@ -117,10 +116,11 @@ if (isset($_GET['deletethread'])) {
                 <form method="post" class="create" action="/index.php">
                     <input type="text" name="ca_username" class="ca_username form-control" placeholder="Username">
                     <input type="email" name="ca_email" class="ca_email form-control" placeholder="E-Mail Address">
+                    <input type="text" name="ca_fname" class="ca_fname form-control" placeholder="First Name">
+                    <input type="text" name="ca_lname" class="ca_lname form-control" placeholder="Last Name">
                     <input type="password" name="ca_password" class="ca_password form-control" placeholder="Password">
                     <input type="password" name="ca_cpassword" class="ca_cpassword form-control" placeholder="Confirm Password">
                     <input type="submit" name="ca_submit">
-                    <button class="close_create" onclick="ca_x_click();">Close</button>
                 </form>
             </div>
         </div>
@@ -131,7 +131,8 @@ if (isset($_GET['deletethread'])) {
             if ($User['admin'] == 1) {
                 echo '<a href="admin/index.php" class="admin_link"><button role="button" class="btn btn-info">Admin Panel</button></a>';
             }
-            echo '<a href="index.php?logout=true" class="logout"><button role="button" class="btn btn-danger">Logout</button></a>
+            echo '<a href="settings.php" class="settings_btn"><button role="button" class="btn btn-success">Settings</button></a>
+            <a href="index.php?logout=true" class="logout"><button role="button" class="btn btn-danger">Logout</button></a>
             <!-- Future Project
             <div class="shoutbox">
                 <div class="messages"></div>
@@ -146,8 +147,11 @@ if (isset($_GET['deletethread'])) {
         </div>
         <?php
             if (isset($_GET['C'])) {
+                echo '<a href="/index.php" class="home"><button type="button" class="btn btn-success">Home</button></a>';
                 if (isset($loggedin)) {
-                    echo '<a href="/addthread.php?C='.$_GET['C'].'&add_thread=true" class="add_thread_btn"><button type="button" class="btn btn-default">Create Thread</button></a>';
+                    if ($User['readonly'] == 0) {
+                        echo '<a href="/addthread.php?C='.$_GET['C'].'&add_thread=true" class="add_thread_btn"><button type="button" class="btn btn-default">Create Thread</button></a>';
+                    }
                 }
                 echo '<div class="threads">';
                 foreach ($threads as $thread) {
@@ -194,15 +198,17 @@ if (isset($_GET['deletethread'])) {
                             /*echo '<a class="edit_post_user" href="/showthread.php?T="'.$thread_id.'&editpost='.$data['id'].'>Edit</a>'; */
                             $thread_id = $data['thread_id'];
                             $post_id = $data['id'];
-                            echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a>";
-                            echo '<a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a></div>>';
+                            if ($User['readonly'] == 0) {
+                                echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a>";
+                                echo '<a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a></div>>';
+                            }
                         }
                         echo '</div>';
                     }
                 }
                 //$Paginate->getdata($thread_id);
                 if ($User['readonly'] == 1) {
-                    echo 'You cannot post';
+                    echo '<div class="cannot"><p>You cannot post</p></div>';
                 } elseif (isset($loggedin)) {
                     echo '<div class="add_post"><form method="post" name="add" id="add">
                         <textarea name="add_post" id="add_post" ></textarea>
@@ -215,5 +221,10 @@ if (isset($_GET['deletethread'])) {
                 echo '</div>';
             }
             ?>
+        <script type="text/javascript">
+            $('#paging').prependTo('.add_post');
+            $('#paging').prependTo('.cannot');
+            $('#paging').appendTo('.threads');
+        </script>
     </body>
 </html>

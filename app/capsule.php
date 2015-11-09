@@ -1,6 +1,6 @@
 <?php
 
-require_once "vendor/autoload.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/vendor/autoload.php";
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 

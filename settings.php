@@ -9,9 +9,8 @@ use App\Controller\CategoryController;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
 $UserController = new UserController;
 $CatController = new CategoryController;
-$categories = $CatController->show();
 
-$User = $UserController::User();
+$User = UserController::User();
 
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -21,6 +20,8 @@ if (isset($_GET['logout'])) {
 
 if (isset($_SESSION['username'], $_SESSION['id'])) {
     $loggedin = true;
+} else {
+    header("Location:/index.php");
 }
 if (isset($_POST['submit'])) {
     $username = $con->real_escape_string($_POST['username']);
@@ -34,11 +35,26 @@ if (isset($_POST['submit'])) {
 if (isset($_POST['ca_submit'])) {
     $username = $con->real_escape_string($_POST['ca_username']);
     $email = $con->real_escape_string($_POST['ca_email']);
-    $fname = $con->real_escape_string($_POST['ca_fname']);
-    $lname = $con->real_escape_string($_POST['ca_lname']);
     $password = $con->real_escape_string($_POST['ca_password']);
     if ($UserController->create($username, $email, $password)) {
         echo "Account Created";
+    }
+}
+if (isset($_POST['submit_settings'])) {
+    $fname = $con->real_escape_string($_POST['fname']);
+    $lname = $con->real_escape_string($_POST['lname']);
+    if ($UserController->edit($fname, $lname, $User['id'])) {
+        header("Location:/settings.php");
+    }
+}
+if (isset($_POST['change_password_submit'])) {
+    if ($_POST['change_password'] == $_POST['con_change_password']) {
+        $edit_password = md5($_POST['change_password']);
+        if ($UserController->editpassword($edit_password, $User['id'])) {
+            header("Location:/settings.php");
+        }
+    } else {
+        echo "Passwords do not match";
     }
 }
 ?>
@@ -71,8 +87,6 @@ if (isset($_POST['ca_submit'])) {
                 <form method="post" class="create" action="/index.php">
                     <input type="text" name="ca_username" class="ca_username form-control" placeholder="Username">
                     <input type="email" name="ca_email" class="ca_email form-control" placeholder="E-Mail Address">
-                    <input type="text" name="ca_fname" class="ca_fname form-control" placeholder="First Name">
-                    <input type="text" name="ca_lname" class="ca_lname form-control" placeholder="Last Name">
                     <input type="password" name="ca_password" class="ca_password form-control" placeholder="Password">
                     <input type="password" name="ca_cpassword" class="ca_cpassword form-control" placeholder="Confirm Password">
                     <input type="submit" name="ca_submit">
@@ -101,18 +115,26 @@ if (isset($_POST['ca_submit'])) {
             </div>-->';
         }?>
         </div>
-        <div class="Categories">
-        <?php
-            foreach ($categories as $category) {
-                foreach ($category as $data) {
-                    echo '<div class="category">';
-                    $id = $data['id'];
-                    echo "<a href='/showthread.php?C=$id' class='title'>".$data['title']."</a>";
-                    echo "<p class='description'>".$data['description']."</p>";
-                    echo '</div>';
-                }
-            }
-        ?>
+        
+        <a href="/index.php" class="home"><button role="button" class="btn btn-success">Home</button></a>
+        <div class="settings">
+            <?php
+            if (isset($_GET['edit_password'])) {
+                echo '<form method="post" class="edit_password" name="edit_password">
+                    <input type="password" name="change_password" placeholder="Password" class="change_password form-control">
+                    <input type="password" name="con_change_password" placeholder="Confirm Password" class="con_change_password form-control">
+                    <button type="submit" name="change_password_submit" class="btn btn-success" id="change_password_submit">Change Password</button>
+                </form>
+                <a href="settings.php" class="back_settings"><button role="button" class="btn btn-default">Back to Settings</button></a>';
+            } else {
+            echo '<form method="post" name="settings" id="settings">
+                <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
+                <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
+                <button type="submit" class="btn btn-success" id="submit_settings" name="submit_settings">Edit Settings</button>
+            </form>
+            <a href="settings.php?edit_password=true" class="edit_pass_btn"><button role="button" class="btn btn-default">Edit Password</button></a>';} ?>
         </div>
+        
+        
     </body>
 </html>

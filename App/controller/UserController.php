@@ -6,7 +6,6 @@ User Controller class
 Handles logins
 */
 
-namespace App\Controller;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -47,11 +46,23 @@ class UserController
             return false;
         }
     }
-    public function create($username, $email, $password)
+    public function create($username, $email, $fname, $lname, $password)
     {
         $hashed_password = md5($password);
-        Capsule::table('users')->insert(['username' =>  $username, 'email'  =>  $email, 'password'  =>  $hashed_password]);
-        return true;
+        $checkusername = Capsule::table('users')->where('username', $username)->first();
+        $checkemail = Capsule::table('users')->where('email', $email)->first();
+        if (empty($checkusername)) {
+            if (empty($checkemail)) {
+                Capsule::table('users')->insert(['username' =>  $username, 'email'  =>  $email, 'first_name'    =>  $fname, 'last_name' =>  $lname, 'password'  =>  $hashed_password]);
+                return true;
+            } else {
+                echo "That email already exists";
+                return false;
+            }
+        } else {
+            echo "That username already exists";
+            return false;
+        }
     }
     static function User()
     {
@@ -65,6 +76,16 @@ class UserController
     {
         session_destroy();
         header('Location:/index.php');
+    }
+    public function edit($fname, $lname, $user_id)
+    {
+        Capsule::table('users')->where('id', $user_id)->update(['first_name'    =>  $fname, 'last_name' =>  $lname]);
+        return true;
+    }
+    public function editpassword($edit_password, $user_id)
+    {
+        Capsule::table('users')->where('id', $user_id)->update(['password'  =>  $edit_password]);
+        return true;
     }
 }
 

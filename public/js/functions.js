@@ -1,11 +1,11 @@
 var login_click = function() {
-    $('.login_panel').show();
+    $('.login_panel').toggle();
 }
 var login_x_click = function() {
     $('.login_panel').hide();
 }
 var ca_click = function() {
-    $('.ca_panel').show();
+    $('.ca_panel').toggle();
 
 }
 var ca_x_click = function() {
