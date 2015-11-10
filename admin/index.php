@@ -278,6 +278,7 @@ if (isset($_POST['admin_password_submit'])) {
                 <p class="readonly">'.$valreadonly.'</p>';
             } else {
                 echo '<a href="/index.php" class="home"><button type="button" class="btn btn-success">Home</button></a>';
+                echo '<a href="categories.php" class="categories_btn"><button type="button" class="btn btn-default">Categories</button></a>';
                 echo '<a href="index.php?create_user=true" class="add_user_btn"><button type="button" class="btn btn-default">Create User</button></a>';
                 echo '<div class="Users">';
                 foreach ($Users as $user) {

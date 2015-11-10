@@ -99,7 +99,8 @@ body {
 .settings,
 .User_info,
 .edit_user,
-.create_user {
+.create_user,
+.edit_category {
     width: 50%;
     position: relative;
     top: 15%;
@@ -233,10 +234,20 @@ input {
     top: 14.7%;
     left: 69.8%;
 }
+.add_category_btn {
+    position: fixed;
+    top: 11%;
+    left: 69%;
+}
 .home,
 .back_user {
     position: fixed;
     top: 14.7%;
+    left: 26%;
+}
+.click_to_edit {
+    position: fixed;
+    top: 11%;
     left: 26%;
 }
 .return {
@@ -276,6 +287,10 @@ input {
     color: black;
     width: 30%;
 }
+#edit_category input {
+    color: black;
+    width: 50%;
+}
 .edit_admin,
 .edit_readonly,
 .create_admin,
@@ -295,6 +310,11 @@ input {
     left: 33%;
     top: 5%;
 }
+#edit_category {
+    position: relative;
+    left: 33%;
+    top: 15%;
+}
 .edit_pass_btn {
     position: relative;
     top: 30%;
@@ -307,10 +327,16 @@ input {
 }
 #user_info p,
 #user_info h4,
-#user_info h3 {
+#user_info h3{
     text-align: center;
 }
 .delete_user_btn {
     position: relative;
     float: right;
 }
+.categories_btn {
+    position: fixed;
+    top: 14.7%;
+    left: 48%;
+}
+    
