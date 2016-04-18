@@ -1,14 +1,15 @@
 <?php
 session_start();
-require_once "vendor/autoload.php";
-require_once "app/config.php";
-require_once "app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Controller\UserController;
+require_once 'vendor/autoload.php';
+require_once 'app/config.php';
+require_once 'app/capsule.php';
 use App\Controller\CategoryController;
+use App\Controller\UserController;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new UserController;
-$CatController = new CategoryController;
+$UserController = new UserController();
+$CatController = new CategoryController();
 
 $User = UserController::User();
 
@@ -21,7 +22,7 @@ if (isset($_GET['logout'])) {
 if (isset($_SESSION['username'], $_SESSION['id'])) {
     $loggedin = true;
 } else {
-    header("Location:/index.php");
+    header('Location:/index.php');
 }
 if (isset($_POST['submit'])) {
     $username = $con->real_escape_string($_POST['username']);
@@ -29,7 +30,7 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
@@ -37,24 +38,24 @@ if (isset($_POST['ca_submit'])) {
     $email = $con->real_escape_string($_POST['ca_email']);
     $password = $con->real_escape_string($_POST['ca_password']);
     if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+        echo 'Account Created';
     }
 }
 if (isset($_POST['submit_settings'])) {
     $fname = $con->real_escape_string($_POST['fname']);
     $lname = $con->real_escape_string($_POST['lname']);
     if ($UserController->edit($fname, $lname, $User['id'])) {
-        header("Location:/settings.php");
+        header('Location:/settings.php');
     }
 }
 if (isset($_POST['change_password_submit'])) {
     if ($_POST['change_password'] == $_POST['con_change_password']) {
         $edit_password = md5($_POST['change_password']);
         if ($UserController->editpassword($edit_password, $User['id'])) {
-            header("Location:/settings.php");
+            header('Location:/settings.php');
         }
     } else {
-        echo "Passwords do not match";
+        echo 'Passwords do not match';
     }
 }
 ?>
@@ -127,12 +128,13 @@ if (isset($_POST['change_password_submit'])) {
                 </form>
                 <a href="settings.php" class="back_settings"><button role="button" class="btn btn-default">Back to Settings</button></a>';
             } else {
-            echo '<form method="post" name="settings" id="settings">
+                echo '<form method="post" name="settings" id="settings">
                 First Name: <input type="text" name="fname" class="fname form-control" value="'.$User['first_name'].'">
                 Last Name: <input type="text" name="lname" class="lname form-control" value="'.$User['last_name'].'">
                 <button type="submit" class="btn btn-success" id="submit_settings" name="submit_settings">Edit Settings</button>
             </form>
-            <a href="settings.php?edit_password=true" class="edit_pass_btn"><button role="button" class="btn btn-default">Edit Password</button></a>';} ?>
+            <a href="settings.php?edit_password=true" class="edit_pass_btn"><button role="button" class="btn btn-default">Edit Password</button></a>';
+            } ?>
         </div>
         
         

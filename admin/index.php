@@ -1,22 +1,22 @@
 <?php
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT']."/vendor/autoload.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/app/config.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
+require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/app/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/app/capsule.php';
 use App\Controller\AdminController;
-use App\Controlller\CategoryController as Category;
 use App\Controller\UserController as User;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new User;
-$AdminController = new AdminController;
+$UserController = new User();
+$AdminController = new AdminController();
 
 $User = User::User();
 
 $Users = $AdminController->getusers();
 
 if ($User['admin'] == 0) {
-    header("Location:/index.php");
+    header('Location:/index.php');
 }
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
@@ -43,17 +43,17 @@ if (isset($_POST['ca_submit'])) {
     $lname = $con->real_escape_string($_POST['ca_lname']);
     $password = $con->real_escape_string($_POST['ca_password']);
     if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+        echo 'Account Created';
     }
 }
 if (isset($_GET['delete_user'])) {
     if ($User['admin'] == 1) {
         $user_id = $_GET['delete_user'];
         if ($AdminController->delete($user_id)) {
-            header("Location:index.php");
+            header('Location:index.php');
         }
     } else {
-        header("Location:/index.php");
+        header('Location:/index.php');
     }
 }
 if (isset($_POST['submit_edit'])) {
@@ -63,20 +63,20 @@ if (isset($_POST['submit_edit'])) {
     $fname = $con->real_escape_string($_POST['fname']);
     $lname = $con->real_escape_string($_POST['lname']);
     $admin = $_POST['edit_admin'];
-    switch($admin) {
-        case('Yes'):
+    switch ($admin) {
+        case 'Yes':
             $admin = 1;
             break;
-        case('No'):
+        case 'No':
             $admin = 0;
             break;
     }
     $readonly = $_POST['edit_readonly'];
-    switch($readonly) {
-        case('Yes'):
+    switch ($readonly) {
+        case 'Yes':
             $readonly = 1;
             break;
-        case('No'):
+        case 'No':
             $readonly = 0;
             break;
     }
@@ -84,7 +84,7 @@ if (isset($_POST['submit_edit'])) {
         header("Location:index.php?user=$user_id");
     }
 }
-        
+
 if (isset($_POST['create_user_submit'])) {
     $username = $con->real_escape_string($_POST['create_username']);
     $email = $con->real_escape_string($_POST['create_email']);
@@ -92,25 +92,25 @@ if (isset($_POST['create_user_submit'])) {
     $lname = $con->real_escape_string($_POST['create_lname']);
     $password = $con->real_escape_string($_POST['create_password']);
     $admin = $_POST['create_admin'];
-    switch($admin) {
-        case('Yes'):
+    switch ($admin) {
+        case 'Yes':
             $admin = 1;
             break;
-        case('No'):
+        case 'No':
             $admin = 0;
             break;
     }
     $readonly = $_POST['create_readonly'];
-    switch($readonly) {
-        case('Yes'):
+    switch ($readonly) {
+        case 'Yes':
             $readonly = 1;
             break;
-        case('No'):
+        case 'No':
             $readonly = 0;
             break;
     }
     if ($AdminController->createuser($username, $fname, $lname, $email, $password, intval($admin), intval($readonly))) {
-        header("Location:index.php");
+        header('Location:index.php');
     }
 }
 if (isset($_POST['admin_password_submit'])) {
@@ -121,10 +121,10 @@ if (isset($_POST['admin_password_submit'])) {
             header("Location:index.php?user=$user_id");
         }
     } else {
-        echo "Your passwords do not match";
+        echo 'Your passwords do not match';
     }
 }
-        
+
 ?>
 <html>
     <head>
@@ -242,20 +242,20 @@ if (isset($_POST['admin_password_submit'])) {
                 $edit_User = Capsule::table('users')->where('id', $user_id)->first();
                 $valadmin = $edit_User['admin'];
                 $valreadonly = $edit_User['readonly'];
-                switch($valadmin) {
+                switch ($valadmin) {
                     case 0:
-                        $valadmin = "No";
+                        $valadmin = 'No';
                         break;
                     case 1:
-                        $valadmin = "Yes";
+                        $valadmin = 'Yes';
                         break;
                 }
-                switch($valreadonly) {
+                switch ($valreadonly) {
                     case 0:
-                        $valreadonly = "No";
+                        $valreadonly = 'No';
                         break;
                     case 1:
-                        $valreadonly = "Yes";
+                        $valreadonly = 'Yes';
                         break;
                 }
                 echo '<a href="index.php" class="back_user"><button role="button" class="btn btn-success">Back</button></a>';

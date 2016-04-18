@@ -1,14 +1,15 @@
 <?php
 session_start();
-require_once "vendor/autoload.php";
-require_once "app/config.php";
-require_once "app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Controller\UserController;
+require_once 'vendor/autoload.php';
+require_once 'app/config.php';
+require_once 'app/capsule.php';
 use App\Controller\CategoryController;
+use App\Controller\UserController;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new UserController;
-$CatController = new CategoryController;
+$UserController = new UserController();
+$CatController = new CategoryController();
 $categories = $CatController->show();
 
 $User = $UserController::User();
@@ -28,7 +29,7 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
@@ -38,7 +39,7 @@ if (isset($_POST['ca_submit'])) {
     $lname = $con->real_escape_string($_POST['ca_lname']);
     $password = $con->real_escape_string($_POST['ca_password']);
     if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+        echo 'Account Created';
     }
 }
 ?>
@@ -107,8 +108,8 @@ if (isset($_POST['ca_submit'])) {
                 foreach ($category as $data) {
                     echo '<div class="category">';
                     $id = $data['id'];
-                    echo "<a href='/showthread.php?C=$id' class='title'>".$data['title']."</a>";
-                    echo "<p class='description'>".$data['description']."</p>";
+                    echo "<a href='/showthread.php?C=$id' class='title'>".$data['title'].'</a>';
+                    echo "<p class='description'>".$data['description'].'</p>';
                     echo '</div>';
                 }
             }
