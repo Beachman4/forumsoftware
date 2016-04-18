@@ -1,10 +1,11 @@
 <?php
-require_once "vendor/autoload.php";
-require_once "app/config.php";
-require_once "app/capsule.php";
+require_once 'vendor/autoload.php';
+require_once 'app/config.php';
+require_once 'app/capsule.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-$paginate = new Paginate;
+
+$paginate = new Paginate();
 $paginate->getdata();
 ?>
 <html>

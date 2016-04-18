@@ -1,23 +1,24 @@
 <?php
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT']."/vendor/autoload.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/app/config.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
+require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/app/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/app/capsule.php';
 use App\Controller\AdminController;
 use App\Controller\CategoryController;
 use App\Controller\UserController as User;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new User;
-$AdminController = new AdminController;
-$CategoryController = new CategoryController;
+$UserController = new User();
+$AdminController = new AdminController();
+$CategoryController = new CategoryController();
 
 $User = User::User();
 
 $Categories = $CategoryController->show();
 
 if ($User['admin'] == 0) {
-    header("Location:/index.php");
+    header('Location:/index.php');
 }
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -34,7 +35,7 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
@@ -44,13 +45,13 @@ if (isset($_POST['ca_submit'])) {
     $lname = $con->real_escape_string($_POST['ca_lname']);
     $password = $con->real_escape_string($_POST['ca_password']);
     if ($UserController->create($username, $email, $password)) {
-        echo "Account Created";
+        echo 'Account Created';
     }
 }
 if (isset($_GET['delete_category'])) {
     $category_id = $_GET['delete_category'];
     if ($CategoryController->delete($category_id)) {
-        header("Location:categories.php");
+        header('Location:categories.php');
     }
 }
 if (isset($_POST['edit_category_submit'])) {
@@ -58,7 +59,7 @@ if (isset($_POST['edit_category_submit'])) {
     $title = $con->real_escape_string($_POST['edit_title']);
     $description = $con->real_escape_string($_POST['edit_description']);
     if ($CategoryController->edit($category_id, $title, $description)) {
-        header("Location:categories.php");
+        header('Location:categories.php');
     }
 }
 ?>
@@ -123,7 +124,6 @@ if (isset($_POST['edit_category_submit'])) {
         </div>
         <?php
         if (isset($_GET['add_category'])) {
-            
         } elseif (isset($_GET['C'])) {
             echo '<a href="categories.php" class="back_user"><button role="button" class="btn btn-success">Back</button></a>';
             $category_id = $_GET['C'];
@@ -143,10 +143,10 @@ if (isset($_POST['edit_category_submit'])) {
                 echo '<div class="categories">';
                 foreach ($Category as $data) {
                     echo '<div class="category">';
-                        $id = $data['id'];
-                        echo "<a href='categories.php?C=$id' class='title'>".$data['title']."</a>";
-                        echo "<p class='description'>".$data['description']."</p>";
-                        echo '</div>';
+                    $id = $data['id'];
+                    echo "<a href='categories.php?C=$id' class='title'>".$data['title'].'</a>';
+                    echo "<p class='description'>".$data['description'].'</p>';
+                    echo '</div>';
                 }
                 echo '</div>';
             }

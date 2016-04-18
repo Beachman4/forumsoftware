@@ -1,16 +1,16 @@
 <?php
 namespace App;
+
 session_start();
-require_once "vendor/autoload.php";
-require_once "app/config.php";
-require_once "app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Controller\UserController;
+require_once 'vendor/autoload.php';
+require_once 'app/config.php';
+require_once 'app/capsule.php';
 use App\Controller\ThreadController;
-use App\Paginate;
+use App\Controller\UserController;
+use Illuminate\Database\Capsule\Manager as Capsule;
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new UserController;
-$ThreadController = new ThreadController;
+$UserController = new UserController();
+$ThreadController = new ThreadController();
 
 $User = $UserController::User();
 
@@ -30,7 +30,7 @@ if (isset($_GET['C'])) {
     $thread_id = $_GET['T'];
     $posts = $ThreadController->showthread($thread_id);
 } else {
-    header("Location:/index.php");
+    header('Location:/index.php');
 }
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
@@ -48,18 +48,18 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
     if ($_POST['ca_password'] != $_POST['ca_cpassword']) {
-        echo "Your password does not match";
+        echo 'Your password does not match';
     } else {
         $username = $con->real_escape_string($_POST['ca_username']);
         $email = $con->real_escape_string($_POST['ca_email']);
         $password = $con->real_escape_string($_POST['ca_password']);
         if ($UserController->create($username, $email, $password)) {
-            echo "Account Created";
+            echo 'Account Created';
         }
     }
 }
@@ -158,10 +158,10 @@ if (isset($_GET['deletethread'])) {
                         echo '<div id="thread">';
                         $thread_id = $data['id'];
                         $user_id = $data['user_id'];
-                        $thread_starter = Capsule::table('users')->select('username')->where('id',$user_id)->first();
+                        $thread_starter = Capsule::table('users')->select('username')->where('id', $user_id)->first();
                         $category_id = $_GET['C'];
-                        echo "<a href='/showthread.php?T=$thread_id'>".$data['title']."</a>";
-                        echo "<p class='started_by'>Started By: ".$thread_starter['username']."</p>";
+                        echo "<a href='/showthread.php?T=$thread_id'>".$data['title'].'</a>';
+                        echo "<p class='started_by'>Started By: ".$thread_starter['username'].'</p>';
                         echo "<div class='delete'><a href='/showthread.php?C=$category_id&deletethread=$thread_id' class='delete_thread'>Delete</a></div>";
                         echo '</div>';
                     }
@@ -180,19 +180,18 @@ if (isset($_GET['deletethread'])) {
                         $user_id = $data['user_id'];
                         $poster = Capsule::table('users')->select('username')->where('id', $user_id)->first();
                         echo "<p class='poster' style='text-align: center; word-wrap: break-word;'>".$poster['username']."</p></div><div class='body'>";
-                        echo "<p id='body'>".$data['body']."</p>";
+                        echo "<p id='body'>".$data['body'].'</p>';
                         echo '</div>';
                         if ($User['admin'] == 1) {
                             $thread_id = $data['thread_id'];
                             $post_id = $data['id'];
                             $primary = $data['primary_post'];
                             if ($primary == 1) {
-                                   echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a></div>";
+                                echo "<div class='edit_delete'><a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a></div>";
                             } else {
                                 echo '<div class="edit_delete"><a class="delete_link" href="/showthread.php?T='.$thread_id.'&delete_post='.$data['id'].'">Delete</a>';
                                 echo "<a class='edit_post_user' href='/editpost.php?T=$thread_id&editpost=$post_id'>Edit</a></div>";
                             }
-                                
                         } elseif ($user_id == $User['id']) {
                             /*echo '<a class="edit_post_user" href="/showthread.php?T="'.$thread_id.'&editpost='.$data['id'].'>Edit</a>'; */
                             $thread_id = $data['thread_id'];

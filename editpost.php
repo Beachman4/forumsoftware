@@ -1,18 +1,20 @@
 <?php
 namespace App;
+
 session_start();
 if (!(isset($_GET['T'], $_GET['editpost']))) {
     header('Location:/index.php');
 }
-require_once "vendor/autoload.php";
-require_once "app/config.php";
-require_once "app/capsule.php";
-use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Controller\UserController as User;
+require_once 'vendor/autoload.php';
+require_once 'app/config.php';
+require_once 'app/capsule.php';
 use App\Controller\ThreadController;
+use App\Controller\UserController as User;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 $con = mysqli_connect($hostname, $dbusername, $dbpassword, $db);
-$UserController = new User;
-$ThreadController = new ThreadController;
+$UserController = new User();
+$ThreadController = new ThreadController();
 
 $User = User::User();
 
@@ -25,7 +27,7 @@ if (isset($_GET['logout'])) {
 if (isset($_SESSION['username'], $_SESSION['id'])) {
     $loggedin = true;
 }
-      
+
 if (isset($_GET['logout'])) {
     if ($_GET['logout'] == true) {
         $UserController->logout();
@@ -42,18 +44,18 @@ if (isset($_POST['submit'])) {
     if ($UserController->login($username, $password)) {
         header('Location:/index.php');
     } else {
-        echo "Login Failed";
+        echo 'Login Failed';
     }
 }
 if (isset($_POST['ca_submit'])) {
     if ($_POST['ca_password'] != $_POST['ca_cpassword']) {
-        echo "Your password does not match";
+        echo 'Your password does not match';
     } else {
         $username = $con->real_escape_string($_POST['ca_username']);
         $email = $con->real_escape_string($_POST['ca_email']);
         $password = $con->real_escape_string($_POST['ca_password']);
         if ($UserController->create($username, $email, $password)) {
-            echo "Account Created";
+            echo 'Account Created';
         }
     }
 }
@@ -126,12 +128,12 @@ if (isset($_POST['edit_submit'])) {
         </div>
         
         <?php
-        
+
         $thread_id = $_GET['T'];
         $post_id = $_GET['editpost'];
-        $post = Capsule::table('posts')->select('body', 'user_id')->where('id',$post_id)->first();
+        $post = Capsule::table('posts')->select('body', 'user_id')->where('id', $post_id)->first();
         $body = $post['body'];
-        if ($User['admin']==1) {
+        if ($User['admin'] == 1) {
             echo '<div class="post_edit">';
             echo '<div class="edit_post"><form method="post" name="edit" id="edit">
                 <textarea name="edit_post" id="edit_post" >'.$body.'</textarea>
@@ -140,22 +142,23 @@ if (isset($_POST['edit_submit'])) {
                 </script>
                 <button class="btn btn-info" name="edit_submit" id="edit_submit" style="float: right;" type="submit">Edit Post</button>
             </form></div>';
-        echo '</div>';
+            echo '</div>';
         } elseif ($post['user_id'] == $User['id']) {
             echo '<div class="posts">';
-        if ($User['readonly'] == 1) {
-            header('Location: /index.php');
-        } elseif (isset($loggedin)) {
-            echo '<div class="edit_post"><form method="post" name="edit" id="edit">
+            if ($User['readonly'] == 1) {
+                header('Location: /index.php');
+            } elseif (isset($loggedin)) {
+                echo '<div class="edit_post"><form method="post" name="edit" id="edit">
                 <textarea name="edit_post" id="edit_post" >'.$body.'</textarea>
                 <script type="text/javascript">
                     CKEDITOR.replace("edit_post");
                 </script>
                 <button class="btn btn-info" name="edit_submit" id="edit_submit" style="float: right;" type="submit">Edit Post</button>
-            </form></div>';}
-        echo '</div>';
+            </form></div>';
+            }
+            echo '</div>';
         } else {
-            header("Location: /index.php");
+            header('Location: /index.php');
         }
         ?>
     </body>
